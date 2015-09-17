@@ -21,7 +21,7 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
   val vHackfile = FileVirtualScalaJSIRFile(hackFile)
   val (hackClassInfo, hackClassDef) = vHackfile.infoAndTree
-
+  val hackClassType = ClassType(hackClassDef.name.name)
 
   val newMethods = 
     (hackClassDef.defs map {memberDef =>
@@ -29,12 +29,22 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
     memberDef match {
         case MethodDef(b, ident  @ Ident(iden, origName), params, resultType, mods) 
-          if (iden.toString.contains("setHello"))=>
+          if (iden.toString.startsWith(fieldName+"$und$eq"))=>
           //println("original method "+memberDef)
-          Some(MethodDef(b, ident, params, classType, mods)(OptimizerHints.empty, None))
-        case _ =>
+          if (resultType == hackClassType)
+            Some(MethodDef(b, ident, params, classType, mods)(OptimizerHints.empty, None))
+          else
+            Some(MethodDef(b, ident, params, resultType, mods)(OptimizerHints.empty, None))
+        case any =>
+          //Some(any)
           None
     }}).flatten
+
+
+
+
+  val newMethodsInfo =
+    hackClassInfo.methods.filter(_.encodedName.startsWith(fieldName+"$und$eq"))
 
   println("2here be hack\n\n\n"+newMethods.mkString("\n")+"\n\n")
 
@@ -57,6 +67,18 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
   } getOrElse {
     throw new Exception(s"Could not find field `$fieldName`")
   }
+
+  val newField = 
+  (hackClassDef.defs map {memberDef =>
+    implicit val pos = memberDef.pos
+
+    memberDef match {
+        case FieldDef(ident @ Ident(id, Some(origName)), tpe, mutable) => 
+          Some(FieldDef(ident, tpe, mutable))
+        case any =>
+          None
+    }}).flatten.head
+
   println(fieldIdent)
 
   if (alreadyMutable) {
@@ -69,7 +91,8 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
     memberDef match {
       case FieldDef(`fieldIdent`, tpe, _) =>
-        FieldDef(fieldIdent, tpe, mutable = true)
+        newField
+        //FieldDef(fieldIdent, tpe, mutable = true)
 
       //case MethodDef(false, ident @ Ident("hello__T", origName), params, resultType, _) =>
       /*
@@ -92,10 +115,20 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
     classDef.optimizerHints)(classDef.pos)
   println(newClassDef)
 
+  val newClassInfo = 
+    Infos.ClassInfo(
+        encodedName = classInfo.encodedName,
+        isExported = classInfo.isExported,
+        kind = classInfo.kind,
+        superClass = classInfo.superClass,
+        interfaces = classInfo.interfaces,
+        methods = classInfo.methods ++ newMethodsInfo
+      )
+
   val out = WritableFileVirtualBinaryFile(file)
   val outputStream = out.outputStream
   try {
-    InfoSerializers.serialize(outputStream, classInfo)
+    InfoSerializers.serialize(outputStream, newClassInfo)
     Serializers.serialize(outputStream, newClassDef)
   } finally {
     outputStream.close()

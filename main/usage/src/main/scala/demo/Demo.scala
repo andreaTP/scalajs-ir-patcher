@@ -7,7 +7,13 @@ object Demo extends js.JSApp {
   	val foo = new Foo()
 
   		println(foo.hello+" world")
-  		//foo.asInstanceOf[Any].asInstanceOf[MockFooHello].hello = "let say CIAO"
+
+  		type Mock = {
+  			var hello: String
+  		}
+
+  		foo.asInstanceOf[Mock].hello = "pippo"
+  		//.hello = "let say CIAO"
   		println(foo.hello+" world")
   		println("ok")
 	}

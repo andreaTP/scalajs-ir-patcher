@@ -1,0 +1,21 @@
+[0m[[0minfo[0m] [0mPackaging /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/irpatchplugin-0.0.1-SNAPSHOT.jar ...[0m
+[0m[[0mdebug[0m] [0mInput file mappings:[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$$anonfun$3.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$$anonfun$3.class[0m
+[0m[[0mdebug[0m] [0m	unicredit[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$$anonfun$5.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$$anonfun$5.class[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$.class[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$$anonfun$4.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$$anonfun$4.class[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	scalac-plugin.xml[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/scalac-plugin.xml[0m
+[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/classes/unicredit/IrPatcherPlugin.class[0m
+[0m[[0minfo[0m] [0mDone packaging.[0m

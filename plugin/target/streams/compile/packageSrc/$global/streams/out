@@ -1,7 +1,0 @@
-[0m[[0minfo[0m] [0mPackaging /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/target/scala-2.10/sbt-0.13/irpatchplugin-0.0.1-SNAPSHOT-sources.jar ...[0m
-[0m[[0mdebug[0m] [0mInput file mappings:[0m
-[0m[[0mdebug[0m] [0m	scalac-plugin.xml[0m
-[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/src/main/resources/scalac-plugin.xml[0m
-[0m[[0mdebug[0m] [0m	unicredit/IrPatcherPlugin.scala[0m
-[0m[[0mdebug[0m] [0m	  /Users/andrea/Documents/workspace/temp/ir-patcher/plugin/src/main/scala/unicredit/IrPatcherPlugin.scala[0m
-[0m[[0minfo[0m] [0mDone packaging.[0m

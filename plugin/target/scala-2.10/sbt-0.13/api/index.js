@@ -1,1 +1,0 @@
-Index.PACKAGES = {"sbt" : [], "unicredit" : [{"object" : "unicredit\/IrPatcherPlugin$.html", "name" : "unicredit.IrPatcherPlugin"}]};

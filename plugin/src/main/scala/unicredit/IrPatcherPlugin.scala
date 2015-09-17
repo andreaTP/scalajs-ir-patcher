@@ -29,7 +29,7 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
     memberDef match {
         case MethodDef(b, ident  @ Ident(iden, origName), params, resultType, mods) 
-          if (iden.toString.startsWith(fieldName+"$und$eq"))=>
+          if (iden.toString.contains("setHello"))=>
           //println("original method "+memberDef)
           if (resultType == hackClassType)
             Some(MethodDef(b, ident, params, classType, mods)(OptimizerHints.empty, None))
@@ -44,7 +44,7 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
 
   val newMethodsInfo =
-    hackClassInfo.methods.filter(_.encodedName.startsWith(fieldName+"$und$eq"))
+    hackClassInfo.methods.filter(_.encodedName.contains("setHello"))
 
   println("2here be hack\n\n\n"+newMethods.mkString("\n")+"\n\n")
 

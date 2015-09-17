@@ -23,8 +23,11 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
   val (hackClassInfo, hackClassDef) = vHackfile.infoAndTree
   val hackClassType = ClassType(hackClassDef.name.name)
 
-  def condition(x: String) =
-    x.startsWith("setHello") || x.startsWith("hello$und$eq")
+  def condition(x: String) = {
+    println("DEBUG -> "+x)
+    //x.startsWith("setHello") || x.startsWith("hello$und$eq") || x.startsWith("$$js$exported")
+    true
+  }
 
   val newMethods = 
     (hackClassDef.defs map {memberDef =>
@@ -38,7 +41,14 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
             Some(MethodDef(b, ident, params, classType, mods)(OptimizerHints.empty, None))
           else
             Some(MethodDef(b, ident, params, resultType, mods)(OptimizerHints.empty, None))
+        case MethodDef(b , sl @ StringLiteral(name),params, resultType, mods) 
+          if (condition(name)) =>
+          if (resultType == hackClassType)
+            Some(MethodDef(b, sl, params, classType, mods)(OptimizerHints.empty, None))
+          else
+            Some(MethodDef(b, sl, params, resultType, mods)(OptimizerHints.empty, None))
         case any =>
+          println("OTHER --> "+any)
           //Some(any)
           None
     }}).flatten

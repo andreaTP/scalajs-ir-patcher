@@ -10,11 +10,24 @@ object Demo extends js.JSApp {
   	println(foo.hello+" world")
 
   	type Mock = {
-  		def setHello(value: String): Unit  
+  		var hello: String
+  		//def setHello(value: String): Unit  
   	}
 
-  	//foo.asInstanceOf[Mock].setHello("pippo")
-  	foo.asInstanceOf[js.Dynamic].setHello("pippo")
+  	try {
+  		foo.asInstanceOf[Mock].hello = "pippo1"
+  	} catch {
+  		case e => 
+  			e.printStackTrace
+  			println("err1")
+  	}
+  	try {
+  		foo.asInstanceOf[js.Dynamic].setHello("pippo")
+  	} catch {
+  		case e => 
+  			e.printStackTrace
+  			println("err2")
+  	}
   	//.hello = "let say CIAO"
   	println(foo.hello+" world")
   	println("ok")

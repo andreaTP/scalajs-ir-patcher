@@ -1,6 +1,6 @@
 package demo.unicredit
 
-
+import scala.scalajs.js.annotation.JSExport
 
 class Foo() {
 
@@ -10,4 +10,10 @@ class Foo() {
 	def setHello(value: String): Unit = {
 		hello = value
 	}*/
+
+	var ciao = "ciao"
+	@JSExport
+	def setCiao(value: String): Unit = {
+		ciao = value
+	}
 }

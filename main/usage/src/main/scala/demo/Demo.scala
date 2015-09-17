@@ -13,7 +13,8 @@ object Demo extends js.JSApp {
   		def setHello(value: String): Unit  
   	}
 
-  	foo.asInstanceOf[Mock].setHello("pippo")
+  	//foo.asInstanceOf[Mock].setHello("pippo")
+  	foo.asInstanceOf[js.Dynamic].setHello("pippo")
   	//.hello = "let say CIAO"
   	println(foo.hello+" world")
   	println("ok")

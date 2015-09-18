@@ -24,9 +24,9 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
   val hackClassType = ClassType(hackClassDef.name.name)
 
   def condition(x: String) = {
-    println("DEBUG -> "+x)
-    //x.startsWith("setHello") || x.startsWith("hello$und$eq") || x.startsWith("$$js$exported")
-    true
+    //println("DEBUG -> "+x)
+    x.startsWith("setHello") || x.startsWith("hello$und$eq") || x.startsWith("$$js$exported")
+    //true
   }
 
   val newMethods = 
@@ -34,21 +34,25 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
     implicit val pos = memberDef.pos
 
     memberDef match {
-        case MethodDef(b, ident  @ Ident(iden, origName), params, resultType, mods) 
+        case MethodDef(stati, ident  @ Ident(iden, origName), params, resultType, mods) 
           if (condition(iden)) =>
           //println("original method "+memberDef)
-          if (resultType == hackClassType)
-            Some(MethodDef(b, ident, params, classType, mods)(OptimizerHints.empty, None))
+          println("PARAMS -> "+params)
+          println("IDENT -> "+iden)
+          println("origName -> "+origName)
+          println("sametypes -> "+" "+resultType+" - "+hackClassType+" = "+(resultType == hackClassType))
+          if (resultType.toString == hackClassType.toString)
+            Some(MethodDef(stati, ident, params, classType, mods)(OptimizerHints.empty, None))
           else
-            Some(MethodDef(b, ident, params, resultType, mods)(OptimizerHints.empty, None))
-        case MethodDef(b , sl @ StringLiteral(name),params, resultType, mods) 
+            Some(MethodDef(stati, ident, params, resultType, mods)(OptimizerHints.empty, None))
+        case MethodDef(stati , sl @ StringLiteral(name),params, resultType, mods) 
           if (condition(name)) =>
-          if (resultType == hackClassType)
-            Some(MethodDef(b, sl, params, classType, mods)(OptimizerHints.empty, None))
+          if (resultType.toString == hackClassType.toString)
+            Some(MethodDef(stati, sl, params, classType, mods)(OptimizerHints.empty, None))
           else
-            Some(MethodDef(b, sl, params, resultType, mods)(OptimizerHints.empty, None))
+            Some(MethodDef(stati, sl, params, resultType, mods)(OptimizerHints.empty, None))
         case any =>
-          println("OTHER --> "+any)
+          //println("OTHER --> "+any)
           //Some(any)
           None
     }}).flatten
@@ -57,7 +61,79 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
 
   val newMethodsInfo =
-    hackClassInfo.methods.filter(x => condition(x.encodedName))
+    (classInfo.methods ++ hackClassInfo.methods.filter(x => condition(x.encodedName))).
+    /*hackClassInfo.methods.filter(x => condition(x.encodedName))*/map{methodInfo =>
+println("\n\nBefore -> Method info")
+println(methodInfo.accessedClassData)
+println(methodInfo.accessedModules)
+println(methodInfo.encodedName)
+println(methodInfo.instantiatedClasses)
+println(methodInfo.isAbstract)
+println(methodInfo.isExported)
+println(methodInfo.isStatic)
+println(methodInfo.methodsCalled)
+println(methodInfo.methodsCalledStatically)
+println(methodInfo.staticMethodsCalled)
+println(methodInfo.usedInstanceTests)
+
+  val classTypeName = classType match {
+    case ClassType(cls) => cls.toString
+  }
+  val hackClassTypeName = hackClassType match {
+    case ClassType(cls) => cls.toString
+  }
+
+val methodInfo2 = 
+      Infos.MethodInfo(
+        methodInfo.encodedName,
+        methodInfo.isStatic,
+        methodInfo.isAbstract,
+        methodInfo.isExported,
+        methodInfo.methodsCalled.map{x => 
+          val y = x._2.map{z => 
+  if (z == hackClassTypeName) classTypeName
+  else z}
+  if (x._1 == hackClassTypeName) classTypeName -> y
+  else x._1 -> y},
+        methodInfo.methodsCalledStatically.map{x => 
+          val y = x._2.map{z => 
+  if (z == hackClassTypeName) classTypeName
+  else z}
+  if (x._1 == hackClassTypeName) classTypeName -> y
+  else x._1 -> y},
+      methodInfo.staticMethodsCalled.map{x => 
+          val y = x._2.map{z => 
+  if (z == hackClassTypeName) classTypeName
+  else z}
+  if (x._1 == hackClassTypeName) classTypeName -> y
+  else x._1 -> y},
+        methodInfo.instantiatedClasses.map{x => 
+  if (x == hackClassTypeName) classTypeName
+  else x},
+        methodInfo.accessedModules.map{x => 
+  if (x == hackClassTypeName) classTypeName
+  else x},
+        methodInfo.usedInstanceTests,
+      methodInfo.accessedClassData.map{x => 
+  if (x == hackClassTypeName) classTypeName
+  else x}
+        )
+
+println("\nAfter -> Method info "+classTypeName+" - "+hackClassTypeName)
+println(methodInfo2.accessedClassData)
+println(methodInfo2.accessedModules)
+println(methodInfo2.encodedName)
+println(methodInfo2.instantiatedClasses)
+println(methodInfo2.isAbstract)
+println(methodInfo2.isExported)
+println(methodInfo2.isStatic)
+println(methodInfo2.methodsCalled)
+println(methodInfo2.methodsCalledStatically)
+println(methodInfo2.staticMethodsCalled)
+println(methodInfo2.usedInstanceTests)
+
+      methodInfo2
+    }
 
   println("2here be hack\n\n\n"+newMethods.mkString("\n")+"\n\n")
 
@@ -135,8 +211,10 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
         kind = classInfo.kind,
         superClass = classInfo.superClass,
         interfaces = classInfo.interfaces,
-        methods = classInfo.methods ++ newMethodsInfo
+        methods = /*classInfo.methods ++*/ newMethodsInfo
       )
+
+  println(" Interfaces -> "+classInfo.interfaces)
 
   val out = WritableFileVirtualBinaryFile(file)
   val outputStream = out.outputStream

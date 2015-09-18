@@ -19,7 +19,9 @@ lazy val usage = (project in file("usage")).settings(
 	organization := "unicredit",
 	name         := "IrPatcherEraserDemoUsage",
 	scalaJSStage in Global := FastOptStage,
-    persistLauncher in Compile := true
+    persistLauncher in Compile := true//,
+    //scalaJSOptimizerOptions ~= { _.withCheckScalaJSIR(true) }
+    //libraryDependencies += "unicredit" %%% "irpatchereraserdemolib" % "0.1-SNAPSHOT"
 ).enablePlugins(ScalaJSPlugin).dependsOn(library)
 
 lazy val root = (project in file(".")).

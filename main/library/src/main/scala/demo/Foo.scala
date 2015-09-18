@@ -11,9 +11,9 @@ class Foo() {
 		hello = value
 	}*/
 
-	var ciao = "ciao"
-	@JSExport
-	def setCiao(value: String): Unit = {
-		ciao = value
-	}
+	//var ciao = "ciao"
+	//@JSExport
+	//def setCiao(value: String): Unit = {
+	//	ciao = value
+	//}
 }

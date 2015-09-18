@@ -21,8 +21,9 @@ object Demo extends js.JSApp {
   			e.printStackTrace
   			println("err1")
   	}
+  	println(foo.hello+" world")
   	try {
-  		foo.asInstanceOf[js.Dynamic].setHello("pippo")
+  		foo.asInstanceOf[js.Dynamic].setHello("pippo2")
   	} catch {
   		case e => 
   			e.printStackTrace

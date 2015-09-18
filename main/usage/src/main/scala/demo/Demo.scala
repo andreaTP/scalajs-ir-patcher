@@ -14,7 +14,7 @@ object Demo extends js.JSApp {
   		//def setHello(value: String): Unit  
   	}
 
-  	try {
+   	try {
   		foo.asInstanceOf[Mock].hello = "pippo1"
   	} catch {
   		case e => 
@@ -22,15 +22,14 @@ object Demo extends js.JSApp {
   			println("err1")
   	}
   	println(foo.hello+" world")
-  	try {
+  	/*try {
   		foo.asInstanceOf[js.Dynamic].setHello("pippo2")
   	} catch {
   		case e => 
   			e.printStackTrace
   			println("err2")
-  	}
+  	}*/
   	//.hello = "let say CIAO"
-  	println(foo.hello+" world")
   	println("ok")
   }
 }

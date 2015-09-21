@@ -25,7 +25,9 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
 
   def condition(x: String) = {
     //println("DEBUG -> "+x)
-    x.startsWith("setHello") || x.startsWith("hello$und$eq") || x.startsWith("$$js$exported")
+    /*x.startsWith("setHello") || */
+    x == (fieldName+"$und$eq__T__V")
+    // || x.startsWith("$$js$exported")
     //true
   }
 
@@ -45,22 +47,25 @@ def patchHackedFile(fieldName : String, file: File, hackFile: File): Unit = {
             Some(MethodDef(stati, ident, params, classType, mods)(OptimizerHints.empty, None))
           else
             Some(MethodDef(stati, ident, params, resultType, mods)(OptimizerHints.empty, None))
-        case MethodDef(stati , sl @ StringLiteral(name),params, resultType, mods) 
+/*        case MethodDef(stati , sl @ StringLiteral(name),params, resultType, mods) 
           if (condition(name)) =>
           if (resultType.toString == hackClassType.toString)
             Some(MethodDef(stati, sl, params, classType, mods)(OptimizerHints.empty, None))
           else
             Some(MethodDef(stati, sl, params, resultType, mods)(OptimizerHints.empty, None))
-        case any =>
+*/        case any =>
           //println("OTHER --> "+any)
           //Some(any)
           None
     }}).flatten
 
+//ok devo filtrare i metodi che aggiungo
 
 
 
   val newMethodsInfo =
+    if (classInfo.methods.contains(x => condition(x))) classInfo.methods
+    else
     (classInfo.methods ++ hackClassInfo.methods.filter(x => condition(x.encodedName))).
     /*hackClassInfo.methods.filter(x => condition(x.encodedName))*/map{methodInfo =>
 println("\n\nBefore -> Method info")
@@ -170,10 +175,13 @@ println(methodInfo2.usedInstanceTests)
 
   println(fieldIdent)
 
-  if (alreadyMutable) {
-    println("The field is already mutable. Don't do anything.")
-    return
-  }
+  val changeOnlyInfos = 
+    if (alreadyMutable) {
+      println("The field is already mutable. Don't do anything.")
+      true//return
+    } else {
+      false
+    }
 
   val newDefs = classDef.defs map { memberDef =>
     implicit val pos = memberDef.pos
@@ -214,13 +222,14 @@ println(methodInfo2.usedInstanceTests)
         methods = /*classInfo.methods ++*/ newMethodsInfo
       )
 
-  println(" Interfaces -> "+classInfo.interfaces)
-
   val out = WritableFileVirtualBinaryFile(file)
   val outputStream = out.outputStream
   try {
     InfoSerializers.serialize(outputStream, newClassInfo)
-    Serializers.serialize(outputStream, newClassDef)
+    if (!changeOnlyInfos)
+      Serializers.serialize(outputStream, newClassDef)
+    else 
+      Serializers.serialize(outputStream, classDef)
   } finally {
     outputStream.close()
   }

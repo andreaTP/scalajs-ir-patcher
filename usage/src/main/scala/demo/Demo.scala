@@ -11,7 +11,6 @@ object Demo extends js.JSApp {
 
   	type Mock = {
   		var hello: String
-  		//def setHello(value: String): Unit  
   	}
 
    	try {
@@ -22,14 +21,14 @@ object Demo extends js.JSApp {
   			println("err1")
   	}
   	println(foo.hello+" world")
-  	/*try {
-  		foo.asInstanceOf[js.Dynamic].setHello("pippo2")
-  	} catch {
-  		case e => 
-  			e.printStackTrace
-  			println("err2")
-  	}*/
-  	//.hello = "let say CIAO"
+
   	println("ok")
+
+    val foo2 = new Foo2()
+
+    type Mock2 = {
+      def ciao()
+    }
+    println(foo2.asInstanceOf[Mock2].ciao()+" "+foo2.mondo())
   }
 }

@@ -3,18 +3,17 @@ scalaVersion := "2.11.7"
 
 organization := "unicredit"
 
-name         := "IrPatcherEraserDemoLib"
+name         := "IrPatcherDemoLib"
 
 compile in Compile := {
 		val analysis = (compile in Compile).value
 		val classDir = (classDirectory in Compile).value
+		val configFile = (baseDirectory in Compile).value / ".." / "ir_patch.config"
 
-		unicredit.IrPatcherPlugin.patchThis(classDir)
+		unicredit.IrPatcherPlugin.patchThis(classDir, configFile)
 
 		//println(classDir.getClass)
 		analysis
 }
-
-emitSourceMaps := false
 
 enablePlugins(ScalaJSPlugin)

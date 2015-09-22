@@ -9,10 +9,10 @@ scalaJSStage in Global := FastOptStage
 
 persistLauncher in Compile := true
     
-//scalaJSOptimizerOptions ~= {
-//	_.withCheckScalaJSIR(true)
-//}
+scalaJSOptimizerOptions ~= {
+	_.withCheckScalaJSIR(true)
+}
 
-libraryDependencies += "unicredit" %%% "irpatchereraserdemolib" % "0.1-SNAPSHOT"
+libraryDependencies += "unicredit" %%% "irpatcherdemolib" % "0.1-SNAPSHOT"
 
 enablePlugins(ScalaJSPlugin)
